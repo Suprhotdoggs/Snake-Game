@@ -1,75 +1,116 @@
 body {
-    background-color: #383838;
+  background-color: #383838;
 }
 
 h1 {
-    text-align: center;
-    color: white;
+  text-align: center;
+  color: white;
 }
 
 .frame {
-    width: 80%;
-    max-width: 604px;
-    min-height: 400px;
-    background-color: #b8860b;
-    text-align: center;
-    margin: auto;
-    border-radius: 10px;
+  width: 80%;
+  max-width: 604px;
+  min-height: 400px;
+  background-color: #b8860b;
+  text-align: center;
+  margin: auto;
+  border-radius: 10px;
 }
 
 .board {
-    display: inline-grid;
-    border-radius: 3px;
-    border: 4px solid;
+  display: inline-grid;
+  border-radius: 3px;
+  border: 4px solid;
 }
 
 .board div {
-    width: 10px;
-    height: 10px;
-    padding: 10px;
+  width: 10px;
+  height: 10px;
+  padding: 10px;
 }
 
 .snake {
-    background-color: blue;
-    height: 20px;
+  background-color: blue;
+  height: 20px;
 }
 
 .head {
-    background-color: yellow;
-    border-radius: 10px;
+  background-color: yellow;
+  border-radius: 10px;
 }
 
 .head.up {
-    border-radius: 6px 6px 0 0;
+  border-radius: 6px 6px 0 0;
 }
 
 .head.down {
-    border-radius: 6px 6px 0 0;
+  border-radius: 6px 6px 0 0;
 }
 
 .head.right {
-    border-radius: 6px 6px 0 0;
+  border-radius: 6px 6px 0 0;
 }
 
 .head.left {
-    border-radius: 6px 6px 0 0;
+  border-radius: 6px 6px 0 0;
 }
 
 .blueberry::after {
-    content: "🍏";
-    position: relative;
-    font-size: 35px;
-    top: -20px;
-    right: 12px;
+  content: "🍏";
+  position: relative;
+  font-size: 35px;
+  top: -20px;
+  right: 12px;
 }
 
 #score-counter {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 20px;
-    color: black;
-    background-color: white;
-    padding: 5px;
-    border-radius: 5px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 20px;
+  color: black;
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+#controls {
+  padding-top: 106px;
+  position: absolute;
+  /* bottom: 10%; */
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  /* grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr; */
+  gap: 10px;
+}
+
+.arrow {
+  width: 60px;
+  height: 60px;
+  font-size: 20px;
+  text-align: center;
+  line-height: 60px;
+  background-color: #ddd;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  user-select: none;
+}
+
+#up {
+  grid-column: 2;
+  grid-row: 1;
+}
+#left {
+  grid-column: 1;
+  grid-row: 2;
+}
+#down {
+  grid-column: 2;
+  grid-row: 2;
+}
+#right {
+  grid-column: 3;
+  grid-row: 2;
 }

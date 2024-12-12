@@ -8,7 +8,9 @@ const snake = [6, 5, 4, 3, 2, 1, 0];
 let head = snake[0];
 
 let score = 0;
-let highScore = localStorage.getItem("highScore") ? parseInt(localStorage.getItem("highScore")) : 0;
+let highScore = localStorage.getItem("highScore")
+  ? parseInt(localStorage.getItem("highScore"))
+  : 0;
 
 let direction = "right";
 let interval;
@@ -17,6 +19,12 @@ let random;
 
 let rightBoundaries = [];
 let leftBoundaries = [];
+
+//Buttons: We are getting the elements by their id (its in the html file)
+const upButton = document.getElementById("up");
+const rightButton = document.getElementById("right");
+const downButton = document.getElementById("down");
+const leftButton = document.getElementById("left");
 
 for (let i = 0; i < height; i++) {
   rightBoundaries.push(i * width - 1);
@@ -38,7 +46,9 @@ function createBoard() {
 
 function color() {
   const divs = board.querySelectorAll("div");
-  divs.forEach((div) => div.classList.remove("snake", "head", "up", "right", "down", "left"));
+  divs.forEach((div) =>
+    div.classList.remove("snake", "head", "up", "right", "down", "left")
+  );
   snake.forEach((num) => divs[num].classList.add("snake"));
   divs[head].classList.add("head", direction);
 }
@@ -103,7 +113,7 @@ function move(dir) {
     audio.volume = 0.2;
     audio.play();
 
-    score++; 
+    score++;
     updateScore();
 
     setRandom();
@@ -129,7 +139,7 @@ function setRandom() {
 function updateScore() {
   if (score > highScore) {
     highScore = score;
-    localStorage.setItem("highScore", highScore); 
+    localStorage.setItem("highScore", highScore);
   }
   const scoreCounter = document.getElementById("score-counter");
   scoreCounter.textContent = `Score: ${score} | High Score: ${highScore}`;
@@ -148,3 +158,29 @@ function GameOver() {
     location.reload();
   }, 200);
 }
+
+// Still for the buttons. But now we are adding EventListeners so it can control the buttons
+
+upButton.addEventListener("click", () => {
+  if (direction !== "down") {
+    move("up");
+  }
+});
+
+rightButton.addEventListener("click", () => {
+  if (direction !== "left") {
+    move("right");
+  }
+});
+
+downButton.addEventListener("click", () => {
+  if (direction !== "up") {
+    move("down");
+  }
+});
+
+leftButton.addEventListener("click", () => {
+  if (direction !== "right") {
+    move("left");
+  }
+});

@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <title>Document</title>
-    <link rel="stylesheet" href="./Snake-Game.css">
-</head>
-<body onload="createBoard()">
+    <link rel="stylesheet" href="./Snake-Game.css" />
+  </head>
+  <body onload="createBoard()">
     <h1>Snake Game</h1>
 
     <div id="score-counter">Score: 0 | High Score: 0</div>
 
     <div class="frame">
-        <div class="board"></div>
+      <div class="board"></div>
+    </div>
+
+    <div id="controls">
+      <button id="up" class="arrow">↑</button>
+      <button id="right" class="arrow">→</button>
+      <button id="down" class="arrow">↓</button>
+      <button id="left" class="arrow">←</button>
     </div>
 
     <script src="./Snake-Game.js"></script>
-</body>
+  </body>
 </html>
