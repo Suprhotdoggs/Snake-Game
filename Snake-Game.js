@@ -17,22 +17,23 @@ let interval;
 let isGameOver = false;
 let random;
 
-let rightBoundaries = [];
-let leftBoundaries = [];
+// Remove boundary arrays
+// let rightBoundaries = [];
+// let leftBoundaries = [];
 
-//Buttons: We are getting the elements by their id (its in the html file)
+// Control buttons
 const upButton = document.getElementById("up");
 const rightButton = document.getElementById("right");
 const downButton = document.getElementById("down");
 const leftButton = document.getElementById("left");
 
-for (let i = 0; i < height; i++) {
-  rightBoundaries.push(i * width - 1);
-}
+// Game over screen
+const gameOverOverlay = document.getElementById("game-over");
+const scoreSummary = document.getElementById("score-summary");
+const playAgainButton = document.getElementById("play-again");
 
-for (let i = 1; i < height; i++) {
-  leftBoundaries.push(i * width);
-}
+// Remove boundary initializations
+// ...
 
 function createBoard() {
   for (let i = 0; i < width * height; i++) {
@@ -41,7 +42,7 @@ function createBoard() {
   }
   setRandom();
   color();
-  updateScore(); // Initialize score display
+  updateScore();
 }
 
 function color() {
@@ -60,19 +61,18 @@ function startAuto() {
 
 window.addEventListener("keydown", (event) => {
   event.preventDefault();
-  console.log(event.key);
   switch (event.key) {
     case "ArrowUp":
-      move("up");
+      if (direction !== "down") move("up");
       break;
     case "ArrowRight":
-      move("right");
+      if (direction !== "left") move("right");
       break;
     case "ArrowLeft":
-      move("left");
+      if (direction !== "right") move("left");
       break;
     case "ArrowDown":
-      move("down");
+      if (direction !== "up") move("down");
       break;
   }
   startAuto();
@@ -82,32 +82,49 @@ function move(dir) {
   if (isGameOver) return;
   const divs = board.querySelectorAll("div");
 
+  let nextHead = head;
+
   if (dir === "up") {
     if (direction === "down") return;
-    head -= width;
-    if (!divs[head]) GameOver();
+    nextHead -= width;
+    if (nextHead < 0) {
+      GameOver();
+      return;
+    }
   } else if (dir === "right") {
     if (direction === "left") return;
-    head++;
-    if (rightBoundaries.includes(head)) GameOver();
+    if ((head + 1) % width === 0) {
+      GameOver();
+      return;
+    }
+    nextHead++;
   } else if (dir === "left") {
     if (direction === "right") return;
-    head--;
-    if (leftBoundaries.includes(head)) GameOver();
+    if (head % width === 0) {
+      GameOver();
+      return;
+    }
+    nextHead--;
   } else if (dir === "down") {
     if (direction === "up") return;
-    head += width;
-    if (!divs[head]) GameOver();
+    nextHead += width;
+    if (nextHead >= width * height) {
+      GameOver();
+      return;
+    }
   }
-  if (snake.includes(head)) {
+
+  if (snake.includes(nextHead)) {
     GameOver();
     return;
   }
 
+  head = nextHead;
   direction = dir;
   snake.unshift(head);
 
-  if (random === head) {
+  if (head === random) {
+    // Play sound when eating the blueberry
     const audio = document.createElement("audio");
     audio.src = "Pebble.ogg";
     audio.volume = 0.2;
@@ -121,19 +138,18 @@ function move(dir) {
     snake.pop();
   }
 
-  startAuto();
   color();
 }
 
 function setRandom() {
-  random = Math.floor(Math.random() * width * height);
-  if (snake.includes(random)) {
-    setRandom();
-  } else {
-    const divs = board.querySelectorAll("div");
-    divs.forEach((div) => div.classList.remove("blueberry"));
-    divs[random].classList.add("blueberry");
-  }
+  const divs = board.querySelectorAll("div");
+  divs.forEach((div) => div.classList.remove("blueberry"));
+
+  do {
+    random = Math.floor(Math.random() * width * height);
+  } while (snake.includes(random));
+
+  divs[random].classList.add("blueberry");
 }
 
 function updateScore() {
@@ -148,39 +164,50 @@ function updateScore() {
 function GameOver() {
   isGameOver = true;
   clearInterval(interval);
+
   const audio = document.createElement("audio");
   audio.src = "Country_Blues.ogg";
   audio.volume = 0.1;
   audio.play();
 
-  setTimeout(() => {
-    alert("GAME OVER 🥺");
-    location.reload();
-  }, 200);
+  scoreSummary.textContent = `Your Score: ${score} | High Score: ${highScore}`;
+  displayPlayAgain();
 }
 
-// Still for the buttons. But now we are adding EventListeners so it can control the buttons
+function displayPlayAgain() {
+  gameOverOverlay.classList.remove("hidden");
+}
 
+playAgainButton.addEventListener("click", () => {
+  gameOverOverlay.classList.add("hidden");
+  location.reload();
+});
+
+// Control button event listeners
 upButton.addEventListener("click", () => {
   if (direction !== "down") {
     move("up");
+    startAuto();
   }
 });
 
 rightButton.addEventListener("click", () => {
   if (direction !== "left") {
     move("right");
+    startAuto();
   }
 });
 
 downButton.addEventListener("click", () => {
   if (direction !== "up") {
     move("down");
+    startAuto();
   }
 });
 
 leftButton.addEventListener("click", () => {
   if (direction !== "right") {
     move("left");
+    startAuto();
   }
 });

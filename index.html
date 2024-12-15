@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Document</title>
+    <title>Snake Game</title>
     <link rel="stylesheet" href="./Snake-Game.css" />
   </head>
   <body onload="createBoard()">
@@ -18,6 +18,14 @@
       <button id="right" class="arrow">→</button>
       <button id="down" class="arrow">↓</button>
       <button id="left" class="arrow">←</button>
+    </div>
+
+    <div id="game-over" class="hidden">
+      <div class="game-over-content">
+        <h2>Game Over!</h2>
+        <p id="score-summary"></p>
+        <button id="play-again">Play Again</button>
+      </div>
     </div>
 
     <script src="./Snake-Game.js"></script>
