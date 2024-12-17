@@ -229,3 +229,12 @@ function handleSwipeGesture() {
 const gameArea = document.querySelector(".frame");
 gameArea.addEventListener("touchstart", handleTouchStart, false);
 gameArea.addEventListener("touchend", handleTouchEnd, false);
+
+// Prevent page scrolling on touchmove
+document.body.addEventListener(
+  "touchmove",
+  (event) => {
+    event.preventDefault();
+  },
+  { passive: false }
+);
