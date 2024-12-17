@@ -47,8 +47,9 @@ h1 {
   right: 12px;
 }
 
-#score-counter {
+/* #score-counter {
   position: absolute;
+  font-weight: bold;
   top: 10px;
   left: 10px;
   font-size: 20px;
@@ -56,7 +57,29 @@ h1 {
   background-color: white;
   padding: 5px;
   border-radius: 5px;
+} */
+
+/* New Score counter design */
+#score-counter {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(to right, #ff9500, #ff5e00);
+  padding: 10px 20px;
+  border: 3px solid #ffcc00;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 2px #000;
+  letter-spacing: 1px;
+  font-family: "Press Start 2P", Arial, sans-serif;
+  text-align: center;
+  transition: transform 0.2s ease;
 }
+
+/* New Score counter design */
 
 #controls {
   padding-top: 20px;
@@ -138,3 +161,13 @@ h1 {
 #play-again:hover {
   background-color: #d4ac0d;
 }
+
+/*  */
+
+@media (max-width: 768px) {
+  #controls {
+    display: none;
+  }
+}
+
+/*  */

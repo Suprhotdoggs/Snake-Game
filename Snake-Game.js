@@ -21,12 +21,6 @@ let random;
 // let rightBoundaries = [];
 // let leftBoundaries = [];
 
-// Control buttons
-const upButton = document.getElementById("up");
-const rightButton = document.getElementById("right");
-const downButton = document.getElementById("down");
-const leftButton = document.getElementById("left");
-
 // Game over screen
 const gameOverOverlay = document.getElementById("game-over");
 const scoreSummary = document.getElementById("score-summary");
@@ -183,31 +177,55 @@ playAgainButton.addEventListener("click", () => {
   location.reload();
 });
 
-// Control button event listeners
-upButton.addEventListener("click", () => {
-  if (direction !== "down") {
-    move("up");
-    startAuto();
-  }
-});
+// Touch controls for swipe input
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
 
-rightButton.addEventListener("click", () => {
-  if (direction !== "left") {
-    move("right");
-    startAuto();
-  }
-});
+const threshold = 30; // Minimum swipe distance in pixels
 
-downButton.addEventListener("click", () => {
-  if (direction !== "up") {
-    move("down");
-    startAuto();
-  }
-});
+function handleTouchStart(event) {
+  const touch = event.changedTouches[0];
+  touchStartX = touch.screenX;
+  touchStartY = touch.screenY;
+}
 
-leftButton.addEventListener("click", () => {
-  if (direction !== "right") {
-    move("left");
-    startAuto();
+function handleTouchEnd(event) {
+  const touch = event.changedTouches[0];
+  touchEndX = touch.screenX;
+  touchEndY = touch.screenY;
+
+  handleSwipeGesture();
+}
+
+function handleSwipeGesture() {
+  const deltaX = touchEndX - touchStartX;
+  const deltaY = touchEndY - touchStartY;
+
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    // Horizontal swipe
+    if (Math.abs(deltaX) > threshold) {
+      if (deltaX > 0 && direction !== "left") {
+        move("right");
+      } else if (deltaX < 0 && direction !== "right") {
+        move("left");
+      }
+    }
+  } else {
+    // Vertical swipe
+    if (Math.abs(deltaY) > threshold) {
+      if (deltaY > 0 && direction !== "up") {
+        move("down");
+      } else if (deltaY < 0 && direction !== "down") {
+        move("up");
+      }
+    }
   }
-});
+  startAuto();
+}
+
+// Add touch event listeners to the game area
+const gameArea = document.querySelector(".frame");
+gameArea.addEventListener("touchstart", handleTouchStart, false);
+gameArea.addEventListener("touchend", handleTouchEnd, false);
