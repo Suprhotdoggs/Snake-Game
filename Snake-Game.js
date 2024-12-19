@@ -17,10 +17,24 @@ let interval;
 let isGameOver = false;
 let random;
 
-// Game over screen
 const gameOverOverlay = document.getElementById("game-over");
 const scoreSummary = document.getElementById("score-summary");
 const playAgainButton = document.getElementById("play-again");
+const volumeToggle = document.getElementById("volume-toggle");
+
+let soundEnabled = true; // Variable to track if sound is enabled or disabled
+
+volumeToggle.addEventListener("change", () => {
+  soundEnabled = volumeToggle.checked; // Toggle soundEnabled based on checkbox state
+});
+
+function playSound(src, volume = 0.2) {
+  if (!soundEnabled) return; // Only play sound if soundEnabled is true
+  const audio = document.createElement("audio");
+  audio.src = src;
+  audio.volume = volume;
+  audio.play();
+}
 
 function createBoard() {
   for (let i = 0; i < width * height; i++) {
@@ -56,6 +70,10 @@ window.addEventListener("keydown", (event) => {
     return;
   } // that function ignores all non arrow keys starting the movement of the snake
 
+  if (!interval) {
+    startAuto();
+  }
+
   switch (event.key) {
     case "ArrowUp":
       if (direction !== "down") move("up");
@@ -70,7 +88,6 @@ window.addEventListener("keydown", (event) => {
       if (direction !== "up") move("down");
       break;
   }
-  startAuto();
 });
 
 // enter key to restart the "Play Again Feature"
@@ -108,11 +125,12 @@ function move(dir) {
     }
     nextHead--;
   } else if (dir === "down") {
-    if (direction === "up") return;
-    nextHead += width;
-    if (nextHead >= width * height) {
-      GameOver();
-      return;
+    if (direction !== "up") {
+      nextHead += width;
+      if (nextHead >= width * height) {
+        GameOver();
+        return;
+      }
     }
   }
 
@@ -126,15 +144,9 @@ function move(dir) {
   snake.unshift(head);
 
   if (head === random) {
-    // Play sound when eating the blueberry
-    const audio = document.createElement("audio");
-    audio.src = "Pebble.ogg";
-    audio.volume = 0.2;
-    audio.play();
-
+    playSound("Pebble.ogg", 0.2); // Updated to use playSound for blueberry sound
     score++;
     updateScore();
-
     setRandom();
   } else {
     snake.pop();
@@ -167,10 +179,7 @@ function GameOver() {
   isGameOver = true;
   clearInterval(interval);
 
-  const audio = document.createElement("audio");
-  audio.src = "Country_Blues.ogg";
-  audio.volume = 0.1;
-  audio.play();
+  playSound("Country_Blues.ogg", 0.1); // Updated to use playSound for game-over sound
 
   scoreSummary.textContent = `Your Score: ${score} | High Score: ${highScore}`;
   displayPlayAgain();
@@ -182,7 +191,7 @@ function displayPlayAgain() {
 
 playAgainButton.addEventListener("click", () => {
   gameOverOverlay.classList.add("hidden");
-  location.reload();
+  restartGame();
 });
 
 // Touch controls for swipe input
@@ -212,7 +221,6 @@ function handleSwipeGesture() {
   const deltaY = touchEndY - touchStartY;
 
   if (Math.abs(deltaX) > Math.abs(deltaY)) {
-    // Horizontal swipe
     if (Math.abs(deltaX) > threshold) {
       if (deltaX > 0 && direction !== "left") {
         move("right");
@@ -221,7 +229,6 @@ function handleSwipeGesture() {
       }
     }
   } else {
-    // Vertical swipe
     if (Math.abs(deltaY) > threshold) {
       if (deltaY > 0 && direction !== "up") {
         move("down");
@@ -233,12 +240,46 @@ function handleSwipeGesture() {
   startAuto();
 }
 
-// Add touch event listeners to the game area
+//
+
+function restartGame() {
+  // Reset variables
+  snake.length = 0;
+  for (let i = 6; i >= 0; i--) {
+    snake.push(i);
+  }
+  head = snake[0];
+  direction = "right";
+  isGameOver = false;
+  score = 0;
+
+  // Clear the board
+  const divs = board.querySelectorAll("div");
+  divs.forEach((div) =>
+    div.classList.remove(
+      "snake",
+      "head",
+      "blueberry",
+      "up",
+      "right",
+      "down",
+      "left"
+    )
+  );
+
+  // Reset and start the game without starting the interval
+  setRandom();
+  color();
+  updateScore();
+  interval = null; // Ensure interval is reset
+}
+
+//
+
 const gameArea = document.querySelector(".frame");
 gameArea.addEventListener("touchstart", handleTouchStart, false);
 gameArea.addEventListener("touchend", handleTouchEnd, false);
 
-// Prevent page scrolling on touchmove
 document.body.addEventListener(
   "touchmove",
   (event) => {

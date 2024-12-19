@@ -7,7 +7,15 @@
   <body onload="createBoard()">
     <h1>Snake Game</h1>
 
-    <div id="score-counter">Score: 0 | High Score: 0</div>
+    <div id="score-and-controls">
+      <div id="score-counter">Score: 0 | High Score: 0</div>
+      <div id="text">
+        Sound:
+        <label>
+          <input type="checkbox" id="volume-toggle" checked />
+        </label>
+      </div>
+    </div>
 
     <div class="frame">
       <div class="board"></div>
@@ -19,13 +27,6 @@
         <p id="score-summary"></p>
         <button id="play-again">Play Again</button>
       </div>
-    </div>
-
-    <div id="controls">
-      <label>
-        <input type="checkbox" id="volume-toggle" checked />
-        Sound On/Off
-      </label>
     </div>
 
     <script src="./Snake-Game.js"></script>
