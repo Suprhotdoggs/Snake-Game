@@ -48,6 +48,14 @@ function startAuto() {
 
 window.addEventListener("keydown", (event) => {
   event.preventDefault();
+
+  if (
+    !["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)
+  ) {
+    event.preventDefault();
+    return;
+  } // that function ignores all non arrow keys starting the movement of the snake
+
   switch (event.key) {
     case "ArrowUp":
       if (direction !== "down") move("up");
