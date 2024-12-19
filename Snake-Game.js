@@ -17,17 +17,10 @@ let interval;
 let isGameOver = false;
 let random;
 
-// Remove boundary arrays
-// let rightBoundaries = [];
-// let leftBoundaries = [];
-
 // Game over screen
 const gameOverOverlay = document.getElementById("game-over");
 const scoreSummary = document.getElementById("score-summary");
 const playAgainButton = document.getElementById("play-again");
-
-// Remove boundary initializations
-// ...
 
 function createBoard() {
   for (let i = 0; i < width * height; i++) {
@@ -70,6 +63,13 @@ window.addEventListener("keydown", (event) => {
       break;
   }
   startAuto();
+});
+
+// enter key to restart the "Play Again Feature"
+document.addEventListener("keydown", (event) => {
+  if (isGameOver && event.key === "Enter") {
+    playAgainButton.click();
+  }
 });
 
 function move(dir) {
